@@ -4,6 +4,7 @@ import { Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "@/constants";
 import CustomButton from "@/components/customButton";
+import { StatusBar } from "expo-status-bar";
 
 export default function Index() {
   return (
@@ -23,16 +24,15 @@ export default function Index() {
           />
 
           <View className="relative mt-5"> 
-            <Text className="text-3xl text-white font-bold text-center">
+            <Text className="text-4xl text-white font-bold text-center">
               Discover Endless Possibilities with {' '}
               <Text className="text-secondary-200">
                 Aora
               </Text>
-              
             </Text>
             <Image 
                 source={images.path}
-                className="w-[136px] h-[15px] absolute -bottom-2 -right-8"
+                className="w-[136px] h-[15px] absolute -bottom-2 -right-5"
                 resizeMode="contain"
               />
           </View>
@@ -50,6 +50,8 @@ export default function Index() {
             isLoading={false}
           />
         </View>
+
+        <StatusBar backgroundColor={'#161622'} style="light"/>
       </ScrollView>
     </SafeAreaView>
   );
