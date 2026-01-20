@@ -3,18 +3,26 @@ import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '@/constants'
 import FormField from '@/components/formField';
+import CustomButton from '@/components/customButton';
+import { Link } from 'expo-router';
 
 const SignIn = () => {
-  const [ form, setform ] = useState({
+  const [form, setform] = useState({
     email: "",
     password: ""
   });
 
+  function onSubmit(e) {
+    e.preventDefault();
+
+
+  }
+
   return (
     <SafeAreaView className='bg-primary h-full'>
       <ScrollView className=''>
-        <View className='w-full justify-center h-full px-4 my-6'>
-          <Image 
+        <View className='w-full justify-center min-h-[83vh] px-4 my-6'>
+          <Image
             source={images.logo}
             resizeMode='contain'
             className='w-[115px] h-[35px]'
@@ -24,23 +32,37 @@ const SignIn = () => {
             Log in to Aora
           </Text>
 
-          <FormField 
+          <FormField
             title="Email"
             placeholder="Enter your email address"
             value={form.email}
-            handleChangeText={(e) => setform({ ...form, email: e})}
+            handleChangeText={(e) => setform({ ...form, email: e })}
             otherStyles="mt-7"
-            keyBoardType="email-address"
+            keyboardType="email-address"
           />
 
-          <FormField 
+          <FormField
             title="Password"
             placeholder="Enter your password"
             value={form.password}
-            handleChangeText={(val) => setform({ ...form, password: val})}
+            handleChangeText={(val) => setform({ ...form, password: val })}
             otherStyles="mt-7"
-            keyBoardType={""}
+            keyboardType={"password"}
           />
+
+          <CustomButton
+            title={"Sign In"}
+            handlePress={onSubmit}
+            containerStyles={"mt-5"}
+            textStyles={"text-white"}
+            isLoading={false}
+
+          />
+
+          <View className='justify-center pt-5 flex-row gap-2'>
+            <Text className='text-lg text-gray-100 font-pregular'>Don't Have an account?</Text>
+            <Link href={"/sign-up"} className='text-secondary text-lg font-psemibold'>Sign Up</Link>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
