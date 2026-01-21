@@ -2,6 +2,8 @@ import { generateAccountId, generateToken } from "../libs/index.js";
 import User from "../models/User.js";
 
 export const signup = async (req, res) => {
+    console.log("Request signup: ", req);
+    
     const { username, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });

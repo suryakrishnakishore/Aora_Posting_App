@@ -1,10 +1,12 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView, Image, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '@/constants'
 import FormField from '@/components/formField';
 import CustomButton from '@/components/customButton';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
+import api from "../../api";
+import * as SecureStore from "expo-secure-store";
 
 const SignUp = () => {
   const [form, setform] = useState({
@@ -13,10 +15,30 @@ const SignUp = () => {
     password: ""
   });
 
-  function onSubmit(e) {
-    e.preventDefault();
+  async function onSubmit(e: any) {
+    const { username, email, password } = form;
 
+    if (!username || !email || !password) {
+      Alert.alert("Error", "Please fill alt the fields.");
+      return;
+    }
 
+    
+    try {
+      console.log("username: ", username);
+      
+      const res = await api.post("/auth/sign-up", {
+        username, email, password
+      });
+
+      // await SecureStore.setItemAsync("token", res.data.token);
+      router.replace("/home");
+
+      // return res.data;
+    } catch (err: any) {
+      console.log("Error while signing up: ", err);
+
+    }
   }
 
   return (
@@ -30,14 +52,14 @@ const SignUp = () => {
           />
 
           <Text className='text-2xl text-white text-semibold mt-10 font-psemibold '>
-            Log in to Aora
+            Sign Up to Aora
           </Text>
 
           <FormField
             title="Username"
             placeholder="Enter your username"
             value={form.username}
-            handleChangeText={(e) => setform({ ...form, username: e })}
+            handleChangeText={(e: any) => setform({ ...form, username: e })}
             otherStyles="mt-7"
             keyboardType="username"
           />
@@ -46,7 +68,7 @@ const SignUp = () => {
             title="Email"
             placeholder="Enter your email address"
             value={form.email}
-            handleChangeText={(e) => setform({ ...form, email: e })}
+            handleChangeText={(e: any) => setform({ ...form, email: e })}
             otherStyles="mt-7"
             keyboardType="email-address"
           />
@@ -55,13 +77,13 @@ const SignUp = () => {
             title="Password"
             placeholder="Enter your password"
             value={form.password}
-            handleChangeText={(val) => setform({ ...form, password: val })}
+            handleChangeText={(val: any) => setform({ ...form, password: val })}
             otherStyles="mt-7"
             keyboardType={"password"}
           />
 
           <CustomButton
-            title={"Sign In"}
+            title={"Sign Up"}
             handlePress={onSubmit}
             containerStyles={"mt-5"}
             textStyles={"text-white"}
@@ -71,7 +93,7 @@ const SignUp = () => {
 
           <View className='justify-center pt-5 flex-row gap-2'>
             <Text className='text-lg text-gray-100 font-psemibold'>Already Have an account?</Text>
-            <Link href={"/sign-in"} className='text-secondary-100'>Sign In</Link>
+            <Link href={"/sign-in"} className='text-secondary text-lg font-psemibold'>Sign In</Link>
           </View>
         </View>
       </ScrollView>

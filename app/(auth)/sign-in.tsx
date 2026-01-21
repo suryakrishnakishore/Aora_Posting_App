@@ -1,10 +1,11 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView, Image, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '@/constants'
 import FormField from '@/components/formField';
 import CustomButton from '@/components/customButton';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
+import api from '@/api';
 
 const SignIn = () => {
   const [form, setform] = useState({
@@ -12,11 +13,25 @@ const SignIn = () => {
     password: ""
   });
 
-  function onSubmit(e) {
-    e.preventDefault();
-
-
-  }
+  async function onSubmit(e: any) {
+      e.preventDefault();
+  
+      const { email, password } = form;
+  
+      if(!email || !password) {
+        Alert.alert("Error", "Please fill alt the fields.");
+        return;
+      }
+  
+      const res = await api.post("/auth/signup", {
+        email, password
+      });
+  
+      // await SecureStore.setItemAsync("token", res.data.token);
+      router.replace("/home");
+  
+      return res.data;
+    }
 
   return (
     <SafeAreaView className='bg-primary h-full'>
@@ -36,7 +51,7 @@ const SignIn = () => {
             title="Email"
             placeholder="Enter your email address"
             value={form.email}
-            handleChangeText={(e) => setform({ ...form, email: e })}
+            handleChangeText={(e: any) => setform({ ...form, email: e })}
             otherStyles="mt-7"
             keyboardType="email-address"
           />
@@ -45,7 +60,7 @@ const SignIn = () => {
             title="Password"
             placeholder="Enter your password"
             value={form.password}
-            handleChangeText={(val) => setform({ ...form, password: val })}
+            handleChangeText={(val: any) => setform({ ...form, password: val })}
             otherStyles="mt-7"
             keyboardType={"password"}
           />
