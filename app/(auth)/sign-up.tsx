@@ -14,6 +14,7 @@ const SignUp = () => {
     email: "",
     password: ""
   });
+  const [isSubmitting, setisSubmitting] = useState(false);
 
   async function onSubmit(e: any) {
     const { username, email, password } = form;
@@ -23,7 +24,8 @@ const SignUp = () => {
       return;
     }
 
-    
+    setisSubmitting(true);
+
     try {
       console.log("username: ", username);
       
@@ -38,6 +40,9 @@ const SignUp = () => {
     } catch (err: any) {
       console.log("Error while signing up: ", err);
 
+    }
+    finally {
+      setisSubmitting(false);
     }
   }
 

@@ -23,7 +23,7 @@ const SignIn = () => {
         return;
       }
   
-      const res = await api.post("/auth/signup", {
+      const res = await api.post("/auth/sign-in", {
         email, password
       });
   
