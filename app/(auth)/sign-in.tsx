@@ -6,6 +6,7 @@ import FormField from '@/components/formField';
 import CustomButton from '@/components/customButton';
 import { Link, router } from 'expo-router';
 import api from '@/api';
+import { useGlobalContext } from '@/context/GlobalProvider';
 
 const SignIn = () => {
   const [form, setform] = useState({
@@ -13,25 +14,26 @@ const SignIn = () => {
     password: ""
   });
 
+  const { signin } = useGlobalContext();
+
   async function onSubmit(e: any) {
-      e.preventDefault();
-  
-      const { email, password } = form;
-  
-      if(!email || !password) {
-        Alert.alert("Error", "Please fill alt the fields.");
-        return;
-      }
-  
-      const res = await api.post("/auth/sign-in", {
-        email, password
-      });
-  
-      // await SecureStore.setItemAsync("token", res.data.token);
-      router.replace("/home");
-  
-      return res.data;
+
+    const { email, password } = form;
+
+    if (!email || !password) {
+      Alert.alert("Error", "Please fill alt the fields.");
+      return;
     }
+
+    try {
+      await signin(email, password);
+      router.replace("/home");
+    } catch (err: any) {
+      console.log("Error while signing in: ", err);
+
+    }
+
+  }
 
   return (
     <SafeAreaView className='bg-primary h-full'>

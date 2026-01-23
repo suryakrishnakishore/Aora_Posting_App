@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Image, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '@/constants'
 import FormField from '@/components/formField';
@@ -7,6 +7,7 @@ import CustomButton from '@/components/customButton';
 import { Link, router } from 'expo-router';
 import api from "../../api";
 import * as SecureStore from "expo-secure-store";
+import { useGlobalContext } from '@/context/GlobalProvider';
 
 const SignUp = () => {
   const [form, setform] = useState({
@@ -15,6 +16,8 @@ const SignUp = () => {
     password: ""
   });
   const [isSubmitting, setisSubmitting] = useState(false);
+
+  const { signup } = useGlobalContext();
 
   async function onSubmit(e: any) {
     const { username, email, password } = form;
@@ -27,13 +30,8 @@ const SignUp = () => {
     setisSubmitting(true);
 
     try {
-      console.log("username: ", username);
       
-      const res = await api.post("/auth/sign-up", {
-        username, email, password
-      });
-
-      // await SecureStore.setItemAsync("token", res.data.token);
+      await signup(username, email, password);
       router.replace("/home");
 
       // return res.data;
