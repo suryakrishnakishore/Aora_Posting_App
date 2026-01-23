@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
-import axios from "axios";
+import api from "@/api";
 
 const GlobalContext = createContext();
 
@@ -36,7 +36,9 @@ function GlobalProvider({ children }) {
 
     const loadUserFromToken = async (token) => {
         try {
-            const res = await api.get("/users/me");
+            const res = await api.get("/users/me", 
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
             setUser(res.data);
         } catch (err) {
             console.log("Error loading user from token: ", err);
