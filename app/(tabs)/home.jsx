@@ -6,6 +6,7 @@ import SearchInput from '@/components/searchInput'
 import Trending from '@/components/trending'
 
 const Home = () => {
+  
   const [refreshing, setRefreshing] = useState(false);
   
   function onRefresh() {
@@ -13,6 +14,7 @@ const Home = () => {
 
     setRefreshing(false);
   }
+
   return (
     <SafeAreaView className='bg-primary h-full'>
       <FlatList
@@ -62,4 +64,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Home;

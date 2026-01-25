@@ -1,5 +1,7 @@
 export function getUser(req, res) {
     try {
+        console.log("User req: ", req);
+        
         return res.status(200)
             .json({ user: req.user });
     } catch (err) {

@@ -15,7 +15,9 @@ function GlobalProvider({ children }) {
     useEffect(() => {
         const loadToken = async () => {
             try {
-                const storedToken = SecureStore.getItemAsync("aora_token");
+                const storedToken = await SecureStore.getItemAsync("aora_token");
+                console.log("Stored Token", storedToken);
+                
                 if (storedToken) {
                     setToken(storedToken);
                     setisLoggedIn(true);
