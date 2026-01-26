@@ -1,4 +1,4 @@
-export function getUser(req, res) {
+export async function getUser(req, res) {
     try {
         console.log("User req: ", req);
         

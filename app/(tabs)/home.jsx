@@ -10,22 +10,38 @@ import VideoCard from '@/components/videoCard';
 const Home = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [latestPosts, setLatestPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const { token } = useGlobalContext();
 
   const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const res = await api.get("/posts",
-          { headers: { Authorization: `Bearer ${token}` } }
-        )
-        setData(res.data.posts);
-      } catch (err) {
-        console.log("Error while fetching posts ", err);
-      } finally {
-        setIsLoading(false);
-      }
+    setIsLoading(true);
+    try {
+      const res = await api.get("/posts",
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      setData(res.data.posts);
+    } catch (err) {
+      console.log("Error while fetching posts ", err);
+    } finally {
+      setIsLoading(false);
     }
+  }
+
+  const fetchLatestPosts = async () => {
+    setLoading(true);
+    try {
+      const res = await api.get("/posts/latest",
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setLatestPosts(res.data.latestPosts);
+    } catch (err) {
+      console.log("Error while fetching latest posts: ", err);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     fetchData();
@@ -69,7 +85,7 @@ const Home = () => {
               <Text className='text-lg font-pregular  mb-3 text-gray-100'>Latest Videos</Text>
             </View>
 
-            <Trending posts={[{ id: 1 }, { id: 2 }, { id: 3 }]} />
+            <Trending posts={latestPosts} />
           </View>
         }}
 
