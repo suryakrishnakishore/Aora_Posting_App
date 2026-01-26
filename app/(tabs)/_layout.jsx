@@ -1,27 +1,33 @@
 import { View, Text, Image } from 'react-native'
 import React from 'react'
-import { Tabs } from 'expo-router'
+import { Redirect, Tabs } from 'expo-router'
 import { icons } from '../../constants';
+import { useGlobalContext } from '@/context/GlobalProvider';
+
+const TabIcon = ({ color, icon, name, focused }) => {
+    return (
+        <View className='flex items-center justify-center gap-2'>
+            <Image
+                source={icon}
+                resizeMode='contain'
+                tintColor={color}
+                className='w-6 h-6 mb-1'
+            />
+            <Text className={`${focused ? 'font-psemibold' : 'font-pregular'} text-xs`} style={{ color: color }}>
+                {name}
+            </Text>
+        </View>
+
+    )
+}
 
 const TabsLayout = () => {
-    const TabIcon = ({ color, icon, name, focused }) => {
-        return (
-            <View className='items-center justify-center gap-2'>
-                <Image
-                    source={icon}
-                    resizeMode='contain'
-                    tintColor={color}
-                    className='w-6 h-6'
-                />
-                <Text className={`${focused ? 'font-psemibold' : 'font-pregular'} text-xs`} style={{ color: color }}>
-                    {name}
-                </Text>
-            </View>
+    const { isLoading, isLoggedIn } = useGlobalContext();
 
-        )
-    }
+    if (!isLoading && !isLoggedIn) return <Redirect href="/sign-in" />;
+
     return (
-        <View>
+        <>
             <Tabs
                 screenOptions={{
                     tabBarActiveTintColor: "#FFA001",
@@ -32,6 +38,8 @@ const TabsLayout = () => {
                         borderTopWidth: 1,
                         borderTopColor: "#232533",
                         height: 84,
+                        paddingTop: 8,
+                        paddingBottom: 12
                     },
                 }}
             >
@@ -96,7 +104,7 @@ const TabsLayout = () => {
                     }}
                 />
             </Tabs>
-        </View>
+        </>
     )
 }
 
