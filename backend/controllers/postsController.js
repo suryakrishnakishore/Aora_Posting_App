@@ -55,3 +55,22 @@ export const getByTitile = async (req, res) => {
                     });
     }
 }
+
+export const getMyPosts = async (req, res) => {
+    const id = req.user.accountId;
+    try {
+        const myPosts = (await Video.find({ accountId: id })).sort({ createdAt: -1 });
+
+        return res.status(200)
+                    .json({
+                        message: "My posts fetched successfully.",
+                        myPosts
+                    });
+    } catch (err) {
+        console.log("Error while fetching my posts: ", err);
+        return res.status(500)
+                    .json({
+                        message: "Internal server error"
+                    });
+    }
+}
