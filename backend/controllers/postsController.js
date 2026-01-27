@@ -74,3 +74,23 @@ export const getMyPosts = async (req, res) => {
                     });
     }
 }
+
+export const createPost = async (req, res) => {
+    const { title, video, thumbnail, prompt } = req.body;
+    const userId = req.user._id;
+
+    try {
+        const post = await Video.create({ title, video, thumbnail, prompt, creator: userId });
+
+        return res.status(201)
+                    .json({
+                        message: "Post created successfully"
+                    });
+    } catch (err) {
+        console.log("Error while creating post: ", err);
+        return res.status(500)
+                    .json({
+                        message: "Internal server error"
+                    })
+    }
+}
