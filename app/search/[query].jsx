@@ -7,14 +7,12 @@ const Search = () => {
   const { query } = useLocalSearchParams();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [latestPosts, setLatestPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
   const { token } = useGlobalContext();
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const res = await api.get("/posts",
+      const res = await api.get(`/posts/${query}`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
       setData(res.data.posts);
@@ -28,12 +26,12 @@ const Search = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [query]);
 
   return (
     <SafeAreaView className='bg-primary h-full'>
       <FlatList
-        data={posts}
+        data={data}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => {
           <VideoCard video={item} />
