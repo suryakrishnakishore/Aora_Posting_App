@@ -2,11 +2,12 @@ import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { icons } from '@/constants';
+import { router } from 'expo-router';
 
 const Profile = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { token } = useGlobalContext();
+  const { token, logout } = useGlobalContext();
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -24,6 +25,11 @@ const Profile = () => {
 
   fetchData();
 
+  const logOut = async () => {
+    await logout();
+    router.replace("/sign-in");
+  }
+
   return (
     <SafeAreaView className='bg-primary h-full'>
       <FlatList
@@ -34,7 +40,7 @@ const Profile = () => {
         }}
         ListHeaderComponent={() => {
           <View className='w-full justify-center items-start mt-6 mb-12 px-4'>
-            <TouchableOpacity className='w-full mb-10 items-end'>
+            <TouchableOpacity className='w-full mb-10 items-end' onPress={logOut}>
               <Image
                 source={icons.logout}
                 resizeMode='contain'

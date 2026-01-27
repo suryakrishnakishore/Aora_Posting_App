@@ -51,6 +51,7 @@ function GlobalProvider({ children }) {
     const logout = async () => {
         setToken(null);
         setUser(null);
+        setisLoading(false);
         await SecureStore.deleteItemAsync("token");
     };
 
